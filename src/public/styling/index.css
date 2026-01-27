@@ -1,0 +1,31 @@
+body{
+    display: block;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.VH100 {
+    height: 100VH;
+}
+.loginPage{
+    background: green;
+}
+.adminModule{
+    background: pink;
+}
+.MarshalModule{
+    background: yellow;
+}
+.CSRView{
+    background: gray;
+}
+.CarParkGrid{
+    background: brown;
+}
+.CarParkView{
+    background: red;
+}
+.DataDump{
+    background: purple;
+}
