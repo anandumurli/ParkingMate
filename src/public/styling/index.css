@@ -1,31 +1,65 @@
-body{
-    display: block;
-    height: auto;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+:root {
+  --color-base-100: oklch(14% 0.004 49.25);
+  --color-base-200: oklch(21% 0.006 56.043);
+  --color-base-300: oklch(26% 0.007 34.298);
+  --color-base-content: oklch(97% 0.001 106.424);
+  --color-primary: #02a690;
+  --color-primary-content: oklch(97% 0.021 166.113);
+  --color-secondary: oklch(58% 0.158 241.966);
+  --color-secondary-content: oklch(97% 0.013 236.62);
+  --color-accent: oklch(66% 0.179 58.318);
+  --color-accent-content: oklch(98% 0.022 95.277);
+  --color-neutral: oklch(37% 0.01 67.558);
+  --color-neutral-content: oklch(98% 0.001 106.423);
+  --color-info: oklch(74% 0.16 232.661);
+  --color-info-content: oklch(29% 0.066 243.157);
+  --color-success: oklch(77% 0.152 181.912);
+  --color-success-content: oklch(27% 0.046 192.524);
+  --color-warning: oklch(85% 0.199 91.936);
+  --color-warning-content: oklch(28% 0.066 53.813);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(27% 0.105 12.094);
+  --radius-selector: 0.15rem;
+  --radius-field: 0.15rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
 }
+
 .VH100 {
-    height: 100VH;
+    height: 100VH ;
+    display: block;
 }
-.loginPage{
-    background: green;
+.vertical-center{
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+} 
+.hiddenScreen{
+    display: none !important;
 }
-.adminModule{
-    background: pink;
+.container{
+    width: 100%;
+    max-width: 1500px;   
 }
-.MarshalModule{
-    background: yellow;
+.hide-toast {
+    display: none;
 }
-.CSRView{
-    background: gray;
+
+.custom-glass { 
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.454), #92929282 50% 100%);
+    backdrop-filter: blur(40px);
+    border: none;
 }
-.CarParkGrid{
-    background: brown;
-}
-.CarParkView{
-    background: red;
-}
-.DataDump{
-    background: purple;
+
+.addCar{
+    background-color: #02a690;
+    color: white;
+    text-align: center; 
+    border: 2px solid yellow
 }

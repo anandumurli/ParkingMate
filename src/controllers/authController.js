@@ -3,22 +3,28 @@ import Token from "../models/tokenModel.js";
 import bcrypt from "bcrypt";
 import { generateAccessToken, generateRefreshToken } from "../config/helper.js";
 
+// can not send the response mongoose directly to jwt token generator, 
+// need to fix this in boilerplate
+
+
 export async function login(req, res){
     const {uname, pass} = req.body;
     const currUser = await User.findOne({username: uname})
     if(currUser){
         try{
+
             if (await bcrypt.compare(pass, currUser.password)){
-                // this here we need to make sure we are only storing important things into hash.
-                const accessToken = generateAccessToken(currUser);
-                const refreshToken = generateRefreshToken(currUser);
-                // add username and role as well
-                const newRefreshToken = new Token({userID: currUser._id, tokenHash: refreshToken})
+                const tokenData = {"role": currUser.role, "uname": currUser.uname, "id": currUser._id}
+                const accessToken = generateAccessToken(tokenData);
+                const refreshToken = generateRefreshToken(tokenData);
+                const userData = {userID: currUser._id, tokenHash: refreshToken}
+                const newRefreshToken = new Token(userData)
                 newRefreshToken.save().then(()=>{
                     const userData = {
                         "userID": currUser._id,
                         "accessToken": accessToken,
-                        "refreshToken": refreshToken
+                        "refreshToken": refreshToken,
+                        "role": currUser.role
                     }
                     res.status(200).json({
                         "message": "Login Successful",
@@ -26,13 +32,14 @@ export async function login(req, res){
                     })
                 })
             }else{
-                res.status(401).json({"message": "Password Incorrect."})
+                res.status(200).json({"message": "Password Incorrect."})
             }
         }catch(err){
-            res.status(500).json({"message": err})
+            console.log("thee errror"+  err)
+            res.status(200).json({"m": err})
         }
     }else{
-        res.status(500).json({"message": "No such user exists."})
+        res.status(200).json({"message": "No such user exists."})
     }
 }
 
@@ -44,7 +51,7 @@ export async function logout(req, res){
             res.status(200).json({"message": "Logout Successful"})
         })
     } catch(err){
-        res.status(500).json({"message": err})
+        res.status(200).json({"message": err})
     }
 
 }

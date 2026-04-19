@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
 // get all users
+// making all 500 responses to 200, because axios is stoopid
 export async function getAllUsers(req, res) {
     try {
         const users = await User.find();
@@ -25,7 +26,7 @@ export async function createNewUser(req, res) {
     }catch(err){
         console.log("err", err)
 
-        res.status(500).json({"message": err})
+        res.status(200).json({"message": err})
     }
 }
 
@@ -40,7 +41,7 @@ export async function updateUserPassword(req, res) {
         })
 
     } catch(err){
-        res.status(500).json({"message": err})
+        res.status(200).json({"message": err})
     }
 }
 
@@ -53,7 +54,7 @@ export async function updateRoleBasedPassword(req, res) {
             res.status(200).json({"message": `Passwords for all ${currRole}/s have been updated`})
         })
     }catch(err){
-        res.status(500).json({"message": err})
+        res.status(200).json({"message": err})
     }
 }
 
@@ -65,7 +66,7 @@ export async function deleteUser(req, res) {
             res.status(200).json({"message": "User has been deleted."})
         })
     }catch(err){
-        res.status(500).json({"message": err})
+        res.status(200).json({"message": err})
     }
 }
 
@@ -77,6 +78,6 @@ export async function getUserByID(req,res) {
             res.status(200).json({"user": user})
         })
     } catch(err){
-        res.status(500).json({"message": err})
+        res.status(200).json({"message": err})
     }
 }

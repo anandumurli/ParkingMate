@@ -4,16 +4,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Mate | Parking Made Easy</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+    <!--unpkg for using axios -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- unpkg for lucide  -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
     <link rel="stylesheet" href="./styling/index.css">
     <script defer src="./scripts/index.js"></script>
 </head>
 <body>
-        <div class="VH100 loginPage"></div>
-        <div class="VH100 adminModule"></div>
-        <div class="VH100 MarshalModule"></div>
-        <div class="VH100 CSRView"></div>
-        <div class="VH100 CarParkGrid"></div>
-        <div class="VH100 CarParkView"></div>
-        <div class="VH100 DataDump"></div>
+    
+    <section class="VH100 loginPage" id="loginPage">
+        <div class="container md:mx-auto md:px-4 relative h-full">
+            <div class="card w-full md:max-w-[650px] px-10 py-4 md:p-10  custom-glass vertical-center ">
+                <form id="loginForm" class="flex flex-col ">
+                    <p class="text-center align-center font-extrabold text-3xl text-primary mb-4 ">Login</p>
+
+                    <label class="input validator w-full">
+                        <i data-lucide="user" class="size-5"></i>
+                        <input type="text" id="uname" class="uname" required placeholder="Username" />
+                    </label>
+                    <p class="validator-hint">Username is required </p>
+
+                    <label class="input validator w-full">
+                        <i data-lucide="key-square" class="size-5"></i>
+                        <input type="password" id="pass" class="pass" required placeholder="Password" />
+                    </label>
+                    <p class="validator-hint">Password is required </p>
+                    <button type="submit" value="submit" class="btn btn-primary  w-full md:w-fit md:self-end px-10">Login</button>
+                </form>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="VH100 MarsahlModule" id="MarshalModule">
+        <div class="container h-full 2xl:mx-auto 2xl:px-4">
+            <div class="drawer lg:drawer-open">
+            <input id="drawer-chkbox" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content">
+                <nav class="navbar w-full bg-base-300">
+                    <div class="flex w-full flex-row justify-between items-center">
+                        <div class="flex flex-row justify-center items-center">
+                            <label for="drawer-chkbox" aria-label="open sidebar" class="btn btn-square btn-ghost pr-4">
+                            <i data-lucide="menu"></i>
+                            </label>
+                            <div class="px-4">Parkmate | Marshal's Space</div>
+                        </div>
+                        <div id="logout">
+                            <i data-lucide="log-out"></i>
+                        </div>
+                    </div>
+                
+                </nav>
+                <section id="marshal-legend" class="w-full VH100 p-4 bg-base-100">
+                    
+
+                     <div class="w-full text-center mb-5">
+                        <button class="w-full md:w-80 btn btn-primary font-bold" onclick="section_modal.showModal()">
+                            <i data-lucide="layout-template" class="size-3"></i>
+                            Add Section
+                        </button>
+                     </div>
+
+                     
+                     <div class="w-full text-center mb-5">
+                        <button class="w-full md:w-80 btn btn-primary font-bold" onclick="populateVanModal()">
+                            <i data-lucide="van" class="size-3"></i>
+                            Add Cars
+                        </button>
+                     </div>
+
+                     <dialog id="section_modal" class="modal">
+                        <div class="modal-box bg-base-300">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                    <i data-lucide="circle-x" class="size-5"></i>
+                                </button>
+                            </form>
+
+                            <p class="text-3xl text-primary font-extrabold">Define Section</p>
+                            <p>Define another section for parking</p>
+ 
+                            <form id="sectionForm" onsubmit="sectionFormSubmit(sectionForm); return false" class="flex flex-col mt-5">
+                                <label class="input validator w-full">
+                                    <i data-lucide="grid-2x2-plus" class="size-5"></i>
+                                    <input type="text" id="sname" class="sname" required placeholder="Section Name" />
+                                </label>
+                                <p class="validator-hint">Section Name is required </p>
+
+                                <select class="select validator w-full">
+                                    <option disabled selected>Number of Cars per Row</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                                <p class="validator-hint">Number of cars is required </p>
+                                <button type="submit" value="submit" class="btn btn-primary  w-full md:w-fit md:self-end px-10">Add Section</button>
+
+                            </form>
+                        </div>
+                    </dialog>
+
+                    <dialog id="van_modal" class="modal">
+                        <div class="modal-box bg-base-300">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                    <i data-lucide="circle-x" class="size-5"></i>
+                                </button>
+                            </form>
+
+                            <p class="text-3xl text-primary font-extrabold">Add Van</p>
+                            
+ 
+                            <form id="sectionForm" onsubmit="vanFormSubmit(sectionForm); return false" class="flex flex-col mt-5">
+                                <label class="input validator w-full">
+                                    <i data-lucide="grid-2x2-plus" class="size-5"></i>
+                                    <input type="text" id="vinNo" class="vinNo" required placeholder="Vin Number" />
+                                </label>
+                                <p class="validator-hint">Vin Number is required </p>
+
+                                <label class="input validator w-full">
+                                    <i data-lucide="grid-2x2-plus" class="size-5"></i>
+                                    <input type="text" id="licenseNo" class="licenseNo" required placeholder="License Number" />
+                                </label>
+                                <p class="validator-hint">License Number is required </p>
+
+                                <label class="input validator w-full">
+                                    VAUG
+                                    <input type="text" id="routeNo" class="routeNo" required placeholder="Route Number" />
+                                </label>
+                                <p class="validator-hint">Route Number is required </p>
+
+
+                                <select class="select validator w-full">
+                                    <option disabled selected>Section Name</option>
+                                </select>
+                                <p class="validator-hint">Section Name is required </p>
+                                <button type="submit" value="submit" class="btn btn-primary  w-full md:w-fit md:self-end px-10">Add Section</button>
+
+                            </form>
+                        </div>
+                    </dialog>
+
+                </section>
+                <section id="marshal-edit" class="w-full VH100 p-4 bg-primary hiddenScreen">not legend</section>
+            </div>
+
+            <div class="drawer-side is-drawer-close:overflow-visible">
+                <label for="drawer-chkbox" aria-label="close sidebar" class="drawer-overlay"></label>
+                <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+                <ul class="menu w-full grow">
+                    <li class="my-10">
+                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Legend" onclick="marshalDrawerOption(1)">
+                        <i data-lucide="van" class="size-4"></i>
+                        <span class="is-drawer-close:hidden">Legend</span>
+                    </button>
+                    </li>
+                    <li>
+                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Edit Info" onclick="marshalDrawerOption(2)">
+                        <i data-lucide="square-pen" class="size-4"></i>
+                        <span class="is-drawer-close:hidden">Edit info</span>
+                    </button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </section>
+
+    
+    <div class="toast toast-top toast-end">
+        <div class="alert alert-warning flex flex-row justify-around hide-toast" id="toast">
+            <span id="toast-content"></span>
+            <span id="toast-close"><i data-lucide="x" class="size-3"></i></span>
+        </div>
+    </div>
 </body>
 </html>
