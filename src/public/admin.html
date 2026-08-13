@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+    <!--unpkg for using axios -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- unpkg for lucide  -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="./styling/index.css">
+
+    <script defer src="./scripts/admin.js"></script>
+
+</head>
+<body>
+    <section class="VH100 AdminModule" id="AdminModule">
+        <div class="container h-full 2xl:mx-auto 2xl:px-4">
+            <div class="drawer lg:drawer-open">
+            <input id="drawer-chkbox" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content">
+                <nav class="navbar w-full bg-base-300">
+                    <div class="flex w-full flex-row justify-between items-center">
+                        <div class="flex flex-row justify-center items-center">
+                            <label for="drawer-chkbox" aria-label="open sidebar" class="btn btn-square btn-ghost pr-4">
+                            <i data-lucide="menu"></i>
+                            </label>
+                            <div class="px-4">Hello Admin</div>
+                        </div>
+                        <div id="logout">
+                            <i data-lucide="log-out"></i>
+                        </div>
+                    </div>
+                
+                </nav>
+                <section id="admin-edit" class="w-full VH100 p-4">
+                    <div class="w-full my-3 p-2 bg-neutral">
+                        <h2>Set Number of Waves</h2>
+                        <form id="setWaves" class="flex flex-col">
+
+                            <label class="input validator w-full md:max-w-[650px]">
+                                <i data-lucide="zodiac-aquarius" class="size-5"></i>
+                                <input type="number" min="1" name="noOfWaves" id="noOfWaves" required placeholder="Number of Waves">
+                            </label>
+                            <p class="validator-hint">Number of waves is required</p>
+
+                            <button type="submit" value="submit" class="btn btn-primary  w-full md:w-fit md:self-end px-10">Create Waves</button>
+
+                        </form>
+                    </div>
+                    <div class="divider divider-primary"></div>
+                    <div class="w-full my-3 p-2 bg-neutral">
+
+                        
+                        <h1>Add User</h1>
+                        <div class="divider divider-secondary"></div>
+                        <form id="newUser" class="flex flex-col">
+
+                            <label class="input validator w-full md:max-w-[650px]">
+                                <i data-lucide="user" class="size-5"></i>
+                                <input type="text" name="uname" id="uname" required placeholder="Username">
+                            </label>
+                            <p class="validator-hint">Username is required</p>
+
+                            <label class="input validator w-full md:max-w-[650px]">
+                                <i data-lucide="key-square" class="size-5"></i>
+                                <input type="text" name="password" id="password" required placeholder="Password">
+                            </label>
+                            <p class="validator-hint">Password is required</p>
+                            
+
+                            <label class="input validator w-full md:max-w-[650px] pr-0">
+                                <i data-lucide="badge" class="size-5"></i>
+                                <select class="select w-full" name="role" id="role">
+                                    <option disabled selected>Select an option</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="marshal">Marshal</option>
+                                    <option value="csr">CSR</option>
+                                    <option value="supervisor">Supervisor</option>
+                                </select>
+                            </label>
+                            <p class="validator-hint">Role is required</p>
+
+                            <button type="submit" value="submit" class="btn btn-primary  w-full md:w-fit md:self-end px-10">Create User</button>
+
+                        </form>
+
+
+                    </div>
+                    <div class="divider divider-primary"></div>
+                    <div class="w-full my-3">
+                        <div class="w-full flex flex-col">
+                            <button id="userRefresh" class="btn btn-primary  w-full md:w-fit md:self-end px-10">
+                                <i data-lucide="rotate-ccw" class="size-5"></i>
+                                <p>Refresh</p>
+                            </button>
+                        </div>
+                        <div class="w-full overflow-x-auto md:overflow-visible">
+                            <table class="z-5 table table-zebra min-w-[720px] md:min-w-0">
+                                <thead>
+                                <tr>
+                                    
+                                    <th class="sticky top-0 z-5 bg-base-100 md:static">User</th>
+                                    <th class="sticky top-0 z-5 bg-base-100 md:static">Role</th>
+                                    <th class="sticky top-0 z-5 bg-base-100 md:static">Status</th>
+                                    <th class="sticky top-0 z-5 bg-base-100 md:static">Edit</th>
+                                    <th class="sticky top-0 z-5 bg-base-100 md:static">Delete</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="userTable">
+                                    <!-- the table comes here, generated from the JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <dialog id="userEditModal" class="modal">
+                        <div class="modal-box bg-base-300">
+                            <div class="flex flex-row justify-between items-center">
+                                <p id="modalHeading" class="text-3xl text-primary font-extrabold"></p>
+
+                                <button onclick="editUserCloseModal()" class="btn btn-sm btn-circle btn-ghost ">
+                                    <i data-lucide="circle-x" class="size-5"></i>
+                                </button>
+
+                            </div>
+                            
+ 
+                            <form id="editUser"  class="flex flex-col mt-5">
+                                <input type="text" id="userID" name="userID" class="hidden">
+                                <label class="input m-2 validator w-full">
+                                    <i data-lucide="key-square" class="size-5"></i>
+                                    <input type="password" id="editPassword" class="editPassword" placeholder="Password" />
+                                </label>
+
+                                <label class="input m-2 validator w-full">
+                                    <i data-lucide="key-square" class="size-5"></i>
+                                    <input type="password" id="confirmPassword" class="confirmPassword" placeholder="Confirm Password" />
+                                </label>
+                                <p id="passwordError" class="text-error text-sm hidden">
+                                    Passwords do not match.
+                                </p>
+
+                                <label class="input m-2 validator w-full md:max-w-[650px] pr-0">
+                                    <i data-lucide="badge" class="size-5"></i>
+                                    <select class="select w-full" name="editRole" id="editRole">
+                                        <option disabled selected>Select an option</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="marshal">Marshal</option>
+                                        <option value="csr">CSR</option>
+                                        <option value="supervisor">Supervisor</option>
+                                    </select>
+                                </label>
+
+                                <label class="input m-2 validator w-full md:max-w-[650px] pr-0">
+                                    <i data-lucide="user-pen" class="size-5"></i>
+                                    <select class="select w-full" name="editStatus" id="editStatus">
+                                        <option disabled selected>Select an option</option>
+                                        <option value="false">Inactive</option>
+                                        <option value="true">Active</option>
+                                    </select>
+                                </label>
+
+                                <div class="divider"></div>
+                                <h3>Permissions:</h3>
+                                <label class="label">
+                                    <input type="checkbox" class="checkbox checkbox-primary" name="editPermissionsWaves" id="editPermissionsWaves" value="canAddRemoveWaves" />
+                                    <span class="label-text">Edit Waves</span>
+                                </label>
+                                <label class="label">
+                                    <input type="checkbox" class="checkbox checkbox-primary" name="editPermissionsReports" id="editPermissionsReports" value="canDownloadReports" />
+                                    <span class="label-text">Download Reports</span>
+                                </label>
+                                <label class="label">
+                                    <input type="checkbox" class="checkbox checkbox-primary" name="editPermissionsUsers" id="editPermissionsUsers" value="canManageUsers" />
+                                    <span class="label-text">Manage Users</span>
+                                </label>
+                                <label class="label">
+                                    <input type="checkbox" class="checkbox checkbox-primary" name="editPermissionsDriverMani" id="editPermissionsDriverMani" value="canUploadDriverManifest" />
+                                    <span class="label-text">Edit Driver Manifest</span>
+                                </label>
+                                <label class="label">
+                                    <input type="checkbox" class="checkbox checkbox-primary" name="editPermissionsRouteMani" id="editPermissionsRouteMani" value="canUploadRouteManifest" />
+                                    <span class="label-text">Edit Route Manifest</span>
+                                </label>
+
+                                <button type="submit" value="submit" class="btn btn-primary mt-5 w-full md:w-fit md:self-end px-10">Save Changes</button>
+
+                            </form>
+                        </div>
+                    </dialog>
+                </section>
+                <section id="admin-upload" class="w-full VH100 p-4 hiddenScreen">
+
+                </section>
+            </div>
+
+            <div class="drawer-side is-drawer-close:overflow-visible">
+                <label for="drawer-chkbox" aria-label="close sidebar" class="drawer-overlay"></label>
+                <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+                <ul class="menu w-full grow">
+                    
+                    <li class="mt-5 mb-2">
+                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Edit User" onclick="adminDrawerOption(0)">
+                        <i data-lucide="user-pen" class="size-4"></i>
+                        <span class="is-drawer-close:hidden">Edit Users</span>
+                    </button>
+                    </li>
+                    <div class="divider"></div>
+                    <li class="my-2">
+                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Upload Documents" onclick="adminDrawerOption(1)">
+                        <i data-lucide="file-up" class="size-4"></i>
+                        <span class="is-drawer-close:hidden">Upload Document</span>
+                    </button>
+                    </li>
+                    <div class="divider"></div>
+                    <li class=" my-2">
+                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Legend" onclick="adminDrawerOption(999)">
+                        <i data-lucide="van" class="size-4"></i>
+                        <span class="is-drawer-close:hidden">Go To Legend</span>
+                    </button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </section>
+    
+     <div class="toast toast-top toast-end">
+        <div class="alert alert-warning flex flex-row justify-around hide-toast" id="toast">
+            <span id="toast-content"></span>
+            <span id="toast-close"><i data-lucide="x" class="size-3"></i></span>
+        </div>
+    </div>
+
+</body>
+</html>

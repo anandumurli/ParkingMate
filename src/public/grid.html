@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Mate | Parking Made Easy</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+    <!--unpkg for using axios -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- unpkg for lucide  -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="./styling/index.css">
+    <script defer src="./scripts/grid.js"></script>
+    <style>
+    .grid-layout{border-collapse:collapse;width:100%;min-width:270px;table-layout:fixed}
+    .grid-layout td{padding:3px 2px;vertical-align:middle}
+    .divider-td{margin-left:4px; width:7px;padding:0!important;background:var(--color-error-content)}
+    .cell-wrap{display:block;text-align:center}
+    .cell-label{display:block;font-size:.58rem;font-weight:600;
+                color:var(--color-primary);margin-bottom:2px}
+    .cell-input{display:block;width:100%;font-size:16px;height: 75px;
+                font-weight:500;padding:7px 2px;border:1.5px solid var(--color-primary);
+                text-align:center;outline:none;background:var(--color-base-300);
+                color:var(--color-primary);text-transform:uppercase;letter-spacing:.4px;
+                -webkit-appearance:none;appearance:none;min-width:0;
+                display:flex; align-items: center; justify-content: center;}
+    .cell-input:focus{border-color:var(--color-secondary)}
+    .cell-con{color:var(--color-primary)}
+    /* .cell-input.state-filled{background:var(--color-secondary-background);border-color:var(--color-secondary);color:var(--color-secondary)}
+    .cell-input.state-qr{background:var(--color-primary-background);border-color:var(--color-primary);color:var(--color-primary)}
+    .cell-input.state-dupe{background:var(--color-accent-background);border-color:var(--color-accent);color:var(--color-accent)} */
+    </style>
+</head>
+<body>
+    <section class="VH100 GridModule" id="GridModule">
+        <div class="container h-full 2xl:mx-auto 2xl:px-4">
+            <div class="drawer lg:drawer-open">
+            <input id="drawer-chkbox" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content">
+                <nav class="navbar w-full bg-base-300">
+                    <div class="flex w-full flex-row justify-between items-center">
+                        <div class="flex flex-row justify-center items-center">
+                            <label for="drawer-chkbox" aria-label="open sidebar" class="btn btn-square btn-ghost pr-4">
+                            <i data-lucide="menu"></i>
+                            </label>
+                            <div class="px-4" id="salu">Hello Admin</div>
+                        </div>
+                        <div id="logout">
+                            <i data-lucide="log-out"></i>
+                        </div>
+                    </div>
+                
+                </nav>
+                <section id="grid" class="w-full VH100 p-4">
+                    <div class="w-full my-3 p-2 bg-neutral flex flex-row justify-between items-center md:justify-around">
+                        <div class="dropdown">
+                            <div tabindex="0" role="button" class="btn m-1 btn-primary">Waves</div>
+                            <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm" id="wave-menu">
+                            </ul>
+                            </div>
+
+                        <div>
+                            <form id="callAudit" class="flex flex-row">
+                                <label class="input validator  md:max-w-[650px]">
+                                    <input type="text" name="route" id="route" required placeholder="VAUG----">
+                                </label>
+
+                                <button type="submit" value="submit" class="btn btn-primary">Call Audit</button>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="divider divider-primary"></div>
+                    <div class="grid-scroll overflow-x-auto  my-3 p-2 bg-neutral">
+                        <!-- the grid comes here -->
+                         <table class="grid-layout" id="grid-layout"></table>
+                    </div>
+
+
+                    <dialog id="editCarModal" class="modal">
+                        <div class="modal-box bg-base-300">
+                            <div class="flex flex-row justify-between items-center">
+                                <p id="editCarModalHeading" class="text-3xl text-primary font-extrabold"></p>
+
+                                <button onclick="editCarCloseModal()" class="btn btn-sm btn-circle btn-ghost ">
+                                    <i data-lucide="circle-x" class="size-5"></i>
+                                </button>
+
+                            </div>
+                            
+ 
+                            <div class="mt-5 tabs tabs-border tabs-lg">
+                                <input type="radio" name="carEditModalTab" class="tab" aria-label="Parking" checked="checked"/>
+                                <div class="tab-content border-base-300 bg-neutral p-2">
+                                    <form id="editParking"  class="flex flex-col mt-5">
+                                        <input type="text" id="posID" class="hidden">
+                                        <label class="input validator my-2 w-full">
+                                            <i data-lucide="id-card" class="size-5"></i>
+                                            <input required type="text" id="editDriverID" class="editDriverID" placeholder="Driver ID" />
+                                        </label>
+                                        <p class="validator-hint">Driver ID is required</p>
+                                        
+                                        <label class="input validator my-2 w-full">
+                                            <i data-lucide="van" class="size-5"></i>
+                                            <input required type="text" id="editVin" class="editVin" placeholder="VIN Number" />
+                                        </label>
+                                        <p class="validator-hint">VIN is required</p>
+
+
+                                        <label class="input validator my-2 w-full">
+                                            <i data-lucide="id-card-lanyard" class="size-5"></i>
+                                            <input required type="text" id="editLicense" class="editLicense" placeholder="License Number" />
+                                        </label>
+                                        <p class="validator-hint">License is required</p>
+
+                                        
+                                        <label class="input validator my-2 w-full">
+                                            <i data-lucide="route" class="size-5"></i>
+                                            <input required type="text" id="editRoute" class="editRoute" placeholder="Route Number" />
+                                        </label>
+                                        <p class="validator-hint">Route Number is required</p>
+
+
+                                        <button type="submit" value="submit" class="btn btn-primary mt-5 w-full md:w-fit md:self-end px-10">Save Changes</button>
+                                    </form>
+                                </div>
+
+                                <input type="radio" name="carEditModalTab" class="tab" aria-label="Audit"/>
+                                <div class="tab-content border-base-300 bg-neutral p-2">
+                                    <form id="editAudit"  class="flex flex-col mt-5">
+                                        <input type="text" id="posID" class="hidden">
+
+                                        <fieldset class="fieldset my-2 w-full bg-base-100 border-base-300 border p-2">
+                                            <legend class="fieldset-legend">Audit Status</legend>
+                                            <label class="label flex flex-row justify-between">
+                                                <span>Start Audit</span>
+                                                <input type="checkbox" class="toggle toggle-primary" onchange="auditStatusToggled(event)"/>
+                                            </label>
+                                        </fieldset>
+
+                                        <fieldset class="fieldset my-2 w-full bg-base-100 border-base-300 border p-2">
+                                            <legend class="fieldset-legend">DSIS Packages</legend>
+                                            <label class="input my-2 w-full">
+                                                <input type="text" id="editDSIS" class="editDSIS" placeholder="DSIS" />
+                                            </label>
+                                            <p class="label">Missing Packages</p>
+                                        </fieldset>
+
+                                        <fieldset class="fieldset my-2 w-full bg-base-100 border-base-300 border p-2">
+                                            <legend class="fieldset-legend">Handed To Driver</legend>
+                                            <label class="input my-2 w-full">
+                                                <input type="text" id="editHanded" class="editHanded" placeholder="Handed To Driver" />
+                                            </label>
+                                            <p class="label">Found Packages</p>
+                                        </fieldset>
+                                        
+                                        
+                                        
+                                        <button type="submit" value="submit" class="btn btn-primary mt-5 w-full md:w-fit md:self-end px-10">Save Changes</button>
+                                    </form>
+                                </div>
+
+                                <input type="radio" name="carEditModalTab" class="tab" aria-label="Dispatch"/>
+                                <div class="tab-content border-base-300 bg-neutral p-2">
+                                    <form id="editDispatch"  class="flex flex-col mt-5">
+                                        <input type="text" id="posID" class="hidden">
+
+                                        <fieldset class="fieldset my-2 w-full bg-base-100 border-base-300 border p-2">
+                                            <legend class="fieldset-legend">Audit Status</legend>
+                                            <label class="label flex flex-row justify-between">
+                                                <span>Start Audit</span>
+                                                <input type="checkbox" class="toggle toggle-primary" onchange="auditRequestToggle(event)"/>
+                                            </label>
+                                        </fieldset>
+                                        
+                                        <fieldset class="fieldset my-2 w-full bg-base-100 border-base-300 border p-2">
+                                            <legend class="fieldset-legend">Loading Status</legend>
+                                            <label class="label flex flex-row justify-between">
+                                                <span>Start Loading</span>
+                                                <input type="checkbox" class="toggle toggle-primary" onchange="loadingStatusToggled(event)"/>
+                                            </label>
+                                        </fieldset>
+
+                                        <fieldset class="fieldset my-2 w-full bg-base-100 border-base-300 border p-2">
+                                            <legend class="fieldset-legend">Checkout Status</legend>
+                                            <label class="label flex flex-row justify-between">
+                                                
+                                                <input value="Checkout driver" type="button" class="btn btn-primary w-full"  onchange="dfiverCheckedOut(event)"/>
+                                            </label>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </dialog>
+
+
+
+
+
+
+
+                </section>
+                <section id="optional-update" class="w-full VH100 p-4 hiddenScreen">
+
+                </section>
+            </div>
+
+            <div class="drawer-side is-drawer-close:overflow-visible">
+                <label for="drawer-chkbox" aria-label="close sidebar" class="drawer-overlay"></label>
+                <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+                <ul class="menu w-full grow" id="menu">
+                    
+                    <li class="mt-5 mb-2">
+                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="viewGrid()" onclick="drawerOption(0)">
+                        <i data-lucide="van" class="size-4"></i>
+                        <span class="is-drawer-close:hidden">Legend</span>
+                    </button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </section>
+    
+     <div class="toast toast-top toast-end">
+        <div class="alert alert-warning flex flex-row justify-around hide-toast" id="toast">
+            <span id="toast-content"></span>
+            <span id="toast-close"><i data-lucide="x" class="size-3"></i></span>
+        </div>
+    </div>
+</body>
+</html>

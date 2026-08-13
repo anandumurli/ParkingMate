@@ -88,10 +88,14 @@ document.getElementById('loginForm').addEventListener("submit", (e) => {
             //clear all storage in session 
             sessionStorage.setItem("userID", resp.data.user.userID)
             sessionStorage.setItem("accessToken", resp.data.user.accessToken)
-            sessionStorage.setItem("refreshToken", resp.data.user.refreshToken)
             sessionStorage.setItem("role", resp.data.user.role)
-            setCurrView(resp.data.user.role)
-            setInitValues(resp.data.user)
+            if(resp.data.user.role === "admin" ){
+                window.location.href = "./admin.html"
+            }else{
+                setCurrView(resp.data.user.role)
+                setInitValues(resp.data.user)
+            }
+            
 
 
         }
@@ -150,25 +154,24 @@ function sectionFormSubmit(formElementsArr){
 
 
     var l = (sessionStorage.getItem("sectionList")) ? sessionStorage.getItem("sectionList") : ''
-    l = l + ';' + `${formElementsArr[0][0].value} : ${formElementsArr[0][1].value}`
+    l = l + ';' + `${formElementsArr[0][0].value}:${formElementsArr[0][1].value}`
     sessionStorage.setItem("sectionList", l)
     document.getElementById("section_modal").removeAttribute("open")
     location.reload()
 }
 
+function openModal(modalName){
+    if(modalName) document.getElementById(modalName).setAttribute("open", true)
 
+}
 function populateVanModal(){
     // get the values from session storage, store it as options for the select menu, open the modal
     const sectionList = sessionStorage.getItem("sectionList")
     if (!sectionList){
         showToast("Need to add sections, prior to adding a car.")
     }else{
-
-        console.log("maybe there are section")
-        console.log(sectionList)
+        console.log(sectionList.split(";").filter(Boolean).map((el)=>{return el.split(":")[0]}))
         document.getElementById("van_modal").setAttribute("open", true)
-
-
     }
 }
 
@@ -176,3 +179,11 @@ function vanFormSubmit(formElementsArr){
     
 
 }
+
+
+
+
+// admin will set section, as well as the number of cars in any section.
+// i think we need another db thingy for a two of them one to determine the layout, second for mapping 
+// map -- sectionName: , totalCarsPerSection:, numberOfCarsPerRow:, assignedTo:;
+// layout -- routeNumber:, vinNumber:, checkinTime:, checkOutTime 
