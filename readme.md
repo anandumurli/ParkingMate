@@ -5,7 +5,7 @@ Parking mate is a solution to the problems a Delivery Station of a Last Mile com
 * Mapping the parking (hate not knowing where a route is parked at)
 * Report Generation
 
-Apart from focusing primarily on digitizing a physical workflow, the application also provides a platform to collect information and perform analysis of data, this can later be analyzed to identify recurring process failures, abnormal package-loss patterns, operational bottlenecks, and trends associated with routes or third-party delivery teams.
+Apart from focusing primarily on digitizing a physical workflow, the application also provides a platform to collect information and perform analysis of data, to identify recurring process failures, abnormal package-loss patterns, operational bottlenecks, and trends associated with routes or third-party delivery teams.
 
 ## Version Details
 current version: v0.1  
