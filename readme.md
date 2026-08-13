@@ -14,9 +14,9 @@ This version of the site, focuses providing a platform for:
 * [x] roles to log-in, 
 * [x] add parking spot, 
 * [x] route assigned, 
-* [] packages handed off, 
-* [] audit performed.
-* [] Adding Socket for concurrent updates.
+* [ ] packages handed off, 
+* [ ] audit performed.
+* [ ] Adding Socket for concurrent updates.
 
 
 ## Version Updates Details
